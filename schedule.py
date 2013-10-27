@@ -2,6 +2,7 @@ import random
 import queue    #For FIFO queue
 import heapq    #For priority queues
 
+import FIFO
 #Global time variable
 time = 0
 
@@ -66,6 +67,7 @@ def priority_scheduler(process_queue, cpu_list):
 
 num_cpus = 4
 num_processes = 20
+tcs = 15
 cpus = list()
 #Create the n CPUs
 for i in range(0, num_cpus):
@@ -79,4 +81,5 @@ for i in range(0, num_processes):
     #Initialize processes with sequential pid and random cpu burst
     cpu_burst = random.randrange(50, 400)
     process_queue.put(Process(i, cpu_burst), False)
-    print("[time %(time)dms] Process %(pid)d created (requires %(burst)dms CPU time)" % {'time': time, 'pid':  i + 1, 'burst':  cpu_burst})
+
+FIFO.FIFO_scheduler(process_queue, cpus, tcs)
