@@ -16,7 +16,9 @@ def FIFO_scheduler(process_queue, cpu_list, time_for_context_switch):
     avg_total_wait_time = sys.maxsize
     max_total_wait_time = sys.maxsize
 
-    for process in process_queue:
+    while process_queue.empty() is False:
+        process = process_queue.get()
         print("time %(time)dms Process %(pid)d created (requires %(burst)dms CPU time)" % {'time': time, 'pid': process.process_id, 'burst': process.cpu_burst_time})
+
 
 
