@@ -35,5 +35,3 @@ nosetests.xml
 .project
 .pydevproject
 
-# Ignore FIFO for now
-FIFO.py
