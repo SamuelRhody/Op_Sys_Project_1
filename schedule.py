@@ -38,6 +38,9 @@ class CPU:
     def has_running_process(self):
         return (process is not None)
 
+    def remove_running_process(self):
+        self.current_running_process = None
+
     def __repr__(self):
         return self.name
 
