@@ -7,18 +7,42 @@ import FIFO
 time = 0
 
 class Process:
-    def __init__(self, process_id, cpu_burst_time):
+    def __init__(self, process_id, cpu_burst_time, start_time = 0, priority = None):
         self.process_id = process_id
         self.cpu_burst_time = cpu_burst_time
+        self.wait_time = 0
+        self.priority = priority
+        self.start_time = start_time
+
         self.init_wait_time = 0
         self.total_wait_time = 0
+        self.process_time = 0
+        self.turnaround_time = 0
 
-    def wait_for_start(self):
-        self.init_wait_time += 1
-        self.total_wait_time += 1
+    def wait(self):
+        self.wait_time += 1
 
-    def wait_while_running(self):
-        self.total_wait_time += 1
+    def set_init_wait_time(self):
+        self.init_wait_time = time - self.start_time
+
+    def add_to_wait_time(self, delta_t):
+        pass
+
+    # Returns true if a process is complete
+    def inc_process_time(self):
+        self.process_time += 1
+        if self.process_time >= self.cpu_burst_time:
+            return True
+        return False
+
+    def store_turnaround_time(self):
+        self.turnaround_time = time - self.start_time
+
+    #Returns a tuple for process:
+    # (turnaround time, initial wait time, total wait time)
+    def get_stats(self):
+        return self.turnaround_time, self.init_wait_time, self.total_wait_time
+
 
     def __repr__(self):
         return self.process_id + " " + self.cpu_burst_time
@@ -38,8 +62,10 @@ class CPU:
     def has_running_process(self):
         return (process is not None)
 
-    def remove_running_process(self):
+    def release_process(self):
+        temp_process = self.current_running_process
         self.current_running_process = None
+        return temp_process
 
     def __repr__(self):
         return self.name
