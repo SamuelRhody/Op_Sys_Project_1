@@ -79,10 +79,13 @@ for i in range(0, num_cpus):
     cpus.append(CPU(cpu_name) )
 
 process_queue = queue.Queue(num_processes)
+process_list = () #Process list for continuity while using different queues
 #Create the processes
 for i in range(0, num_processes):
     #Initialize processes with sequential pid and random cpu burst
     cpu_burst = random.randrange(50, 400)
-    process_queue.put(Process(i, cpu_burst), False)
+    process = Process(i, cpu_burst)
+    process_queue.put(process, False)
+    process_list.append(process)
 
 FIFO.FIFO_scheduler(process_queue, cpus, tcs)
