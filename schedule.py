@@ -9,17 +9,15 @@ class Process:
     def __init__(self, process_id, cpu_burst_time):
         self.process_id = process_id
         self.cpu_burst_time = cpu_burst_time
-        self.wait_time = 0
+        self.init_wait_time = 0
+        self.total_wait_time = 0
 
-    #Function to make the process continually wait
-    def wait(self):
-        self.wait_time += 1
+    def wait_for_start(self):
+        self.init_wait_time += 1
+        self.total_wait_time += 1
 
-    def get_burst_time(self):
-        return self.cpu_burst_time
-
-    def get_process_id(self):
-        return self.process_id
+    def wait_while_running(self):
+        self.total_wait_time += 1
 
     def __repr__(self):
         return self.process_id + " " + self.cpu_burst_time
@@ -28,7 +26,6 @@ class CPU:
     def __init__(self, name):
         self.name = name
         self.current_running_process = None
-    # end init definition
 
     def add_process(self, process):
         if( self.current_running_process is None ):
@@ -61,7 +58,6 @@ def FCFS_scheduler(process_queue, cpu_list):
     while(process_queue.empty() is False):
         next_process = process_queue.get()
         schedule_process(next_process, cpu_list)
-        process_queue.task_done()
 
 def priority_scheduler(process_queue, cpu_list):
     priority_queue = []
@@ -75,7 +71,6 @@ cpus = list()
 for i in range(0, num_cpus):
     #Initialize CPUs with sequential name
     cpu_name = chr(i + 65)
-    #cpu_burst = random.randrange(50, 400)
     cpus.append(CPU(cpu_name) )
 
 process_queue = queue.Queue(num_processes)
@@ -84,5 +79,4 @@ for i in range(0, num_processes):
     #Initialize processes with sequential pid and random cpu burst
     cpu_burst = random.randrange(50, 400)
     process_queue.put(Process(i, cpu_burst), False)
-
-FCFS_scheduler(process_queue, cpus)
+    print("[time %(time)dms] Process %(pid)d created (requires %(burst)dms CPU time)" % {'time': time, 'pid':  i + 1, 'burst':  cpu_burst})
